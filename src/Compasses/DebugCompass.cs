@@ -25,20 +25,28 @@ namespace AetherCompass.Compasses
             => ZoneWatcher.CurrentTerritoryType?.RowId != 0;
 
         public override unsafe bool IsObjective(GameObject* o)
-            => o != null && (
+        {
+            if (o == null) return false;
+
+            ObjectKind[] kindsToSearch = [
+                ObjectKind.EventObj,
+                ObjectKind.GatheringPoint,
+                ObjectKind.Aetheryte,
+                ObjectKind.AreaObject,
+                ObjectKind.CardStand,
+                ObjectKind.MjiObject,
+                ObjectKind.BattleNpc
+            ];
+            var kind = o->GetObjectKind();
+
+            return (
 #if DEBUG
             Plugin.Config.DebugTestAllGameObjects ||
 #endif
-            o->ObjectID == Plugin.ClientState.LocalPlayer?.ObjectId
-            || o->ObjectKind == (byte)ObjectKind.EventObj 
-            //|| o->ObjectKind == (byte)ObjectKind.EventNpc
-            || o->ObjectKind == (byte)ObjectKind.GatheringPoint
-            || o->ObjectKind == (byte)ObjectKind.Aetheryte
-            || o->ObjectKind == (byte)ObjectKind.AreaObject
-            || o->ObjectKind == (byte)ObjectKind.CardStand
-            || o->ObjectKind == (byte)ObjectKind.MjiObject
-            || o->ObjectKind == (byte)ObjectKind.BattleNpc
+            o->GetGameObjectId() == Plugin.ClientState.LocalPlayer?.GameObjectId
+            || Array.Exists(kindsToSearch, elem => elem == kind)
             );
+        }
 
         protected override unsafe CachedCompassObjective CreateCompassObjective(GameObject* obj)
             => new DebugCachedCompassObjective(obj);
@@ -56,7 +64,7 @@ namespace AetherCompass.Compasses
             return new(() =>
             {
                 ImGui.Text($"Object: {debugObjective.Name}");
-                ImGui.BulletText($"ObjectId: {debugObjective.GameObjectId.ObjectID}, type {debugObjective.GameObjectId.Type}");
+                ImGui.BulletText($"ObjectId: {debugObjective.GameObjectId.ObjectId}, type {debugObjective.GameObjectId.Type}");
                 ImGui.BulletText($"ObjectKind: {debugObjective.ObjectKind}");
                 ImGui.BulletText($"NpcId: {debugObjective.NpcId} DataId: {debugObjective.DataId}");
                 ImGui.BulletText($"2D-Distance: {debugObjective.Distance2D:0.0}");

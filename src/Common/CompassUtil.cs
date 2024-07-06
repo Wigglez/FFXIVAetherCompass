@@ -1,6 +1,7 @@
 ﻿using AetherCompass.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.Interop;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -14,7 +15,7 @@ namespace AetherCompass.Common
         public unsafe static string GetName(GameObject* o)
             => o == null ? string.Empty
             //: MemoryHelper.ReadSeString((IntPtr)o->Name, 64).TextValue;  
-            : Marshal.PtrToStringUTF8((IntPtr)o->Name) ?? string.Empty;
+            : Marshal.PtrToStringUTF8((IntPtr)o->Name.GetPointer<byte>(0)) ?? string.Empty;
 
         public static string ToTitleCase(string s)
             => System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(s);

@@ -48,11 +48,11 @@ namespace AetherCompass.Compasses
         public override unsafe bool IsObjective(GameObject* o)
         {
             if (o == null) return false;
-            if (IslandConfig.DetectGathering && o->ObjectKind == (byte)ObjectKind.MjiObject)
-                return islandGatherDict.TryGetValue(o->GetNpcID(), out var data)
+            if (IslandConfig.DetectGathering && o->ObjectKind == ObjectKind.MjiObject)
+                return islandGatherDict.TryGetValue(o->GetNameId(), out var data)
                     && (IslandConfig.GatheringObjectsToShow & (1u << (int)data.SheetRowId)) != 0;
-            if (IslandConfig.DetectAnimals && o->ObjectKind == (byte)ObjectKind.BattleNpc)
-                return islandAnimalDict.TryGetValue(o->DataID, out var data)
+            if (IslandConfig.DetectAnimals && o->ObjectKind == ObjectKind.BattleNpc)
+                return islandAnimalDict.TryGetValue(o->BaseId, out var data)
                     && (IslandConfig.AnimalsToShow & (1u << (int)data.SheetRowId)) != 0;
             return false;
         }
@@ -64,9 +64,9 @@ namespace AetherCompass.Compasses
                 return new IslandCachedCompassObjective(obj, 0);
             return obj->ObjectKind switch
             {
-                (byte)ObjectKind.MjiObject => 
+                ObjectKind.MjiObject => 
                     new IslandCachedCompassObjective(obj, IslandObjectType.Gathering),
-                (byte)ObjectKind.BattleNpc => 
+                ObjectKind.BattleNpc => 
                     new IslandCachedCompassObjective(obj, IslandObjectType.Animal),
                 _ => new IslandCachedCompassObjective(obj, 0),
             };

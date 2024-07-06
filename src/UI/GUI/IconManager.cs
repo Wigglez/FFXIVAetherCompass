@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Internal;
+﻿using Dalamud.Interface.Textures.TextureWraps;
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -93,7 +93,7 @@ namespace AetherCompass.UI.GUI
 
         private async void LoadIconAsync(uint iconId)
         {
-            var icon = await Task.Run(() => Plugin.TextureProvider.GetIcon(iconId));
+            var icon = await Task.Run(() => Plugin.TextureProvider.GetFromGameIcon(iconId).RentAsync());
             if (icon == null) throw new IconLoadFailException(iconId);
             map.TryAdd(iconId, new(() => icon, 
                 System.Threading.LazyThreadSafetyMode.ExecutionAndPublication));

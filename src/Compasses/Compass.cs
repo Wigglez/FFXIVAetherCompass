@@ -4,10 +4,9 @@ using AetherCompass.Compasses.Objectives;
 using AetherCompass.Game;
 using AetherCompass.UI;
 using AetherCompass.UI.GUI;
-using Dalamud.Interface.Internal;
+using Dalamud.Interface.Textures.TextureWraps;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using ImGuiNET;
-using ImGuiScene;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -143,8 +142,8 @@ namespace AetherCompass.Compasses
                 {
                     if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
                     var info = infoArray[i];
-                    var obj = info != null ? info->GameObject : null;
-                    if (obj == null || obj->ObjectKind == (byte)ObjectKind.Pc) continue;
+                    var obj = info != null ? info->GameObject : null; // info is an ObjectInfo*
+                    if (obj == null || obj->ObjectKind == ObjectKind.Pc) continue;
                     if (!IsObjective(obj)) continue;
                     var objective = CreateCompassObjective(info);
                     ProcessObjectiveInLoop(objective);

@@ -110,8 +110,8 @@ namespace AetherCompass.Compasses
 #if DEBUG
                 var debugTestAll = Plugin.Config.DebugTestAllGameObjects;
                 void* array = debugTestAll 
-                    ? GameObjects.ObjectListFiltered 
-                    : GameObjects.SortedObjectInfoPointerArray;
+                    ? GameObjects.ObjectListFiltered[0]
+                    : GameObjects.SortedObjectInfoPointerArray[0];
                 int count = debugTestAll 
                     ? GameObjects.ObjectListFilteredCount 
                     : GameObjects.SortedObjectInfoCount;

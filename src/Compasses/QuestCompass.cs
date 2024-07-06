@@ -62,12 +62,12 @@ namespace AetherCompass.Compasses
         {
             if (o == null) return false;
             var kind = (ObjectKind)o->ObjectKind;
-            uint dataId = o->DataID;
+            uint dataId = o->BaseId;
             if (dataId == 0) return false;
             // NOTE: already considered hidden quests or those not revealed by Todos when filling up objQuestMap
             // TODO: AreaObject???
             if (kind == ObjectKind.EventNpc || kind == ObjectKind.EventObj || kind == ObjectKind.AreaObject)
-                return objQuestMap.ContainsKey(o->DataID);
+                return objQuestMap.ContainsKey(o->BaseId);
             return false;
         }
 
